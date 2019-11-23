@@ -23,6 +23,8 @@ public class TestUser extends TestBase{
 		else {
 			System.out.println("登录成功");
 		}
+		
+		
 	}
 	
 	@Test
@@ -33,11 +35,13 @@ public class TestUser extends TestBase{
 		
 		userService.register(user);
 		
+		
 		User xiaojian = new User();
 		xiaojian.setUsername("xiaojian");
 		xiaojian.setPassword("123456");
 		
 		userService.register(xiaojian);
+		
 		
 	}
 	

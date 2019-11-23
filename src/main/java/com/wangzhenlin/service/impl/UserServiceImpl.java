@@ -17,47 +17,51 @@ import com.wangzhenlin.service.UserService;
 public class UserServiceImpl implements UserService {
 
 	@Autowired
-	UserMapper dao;
+	UserMapper userMapper;
 
-	@Override
 	public PageInfo<User> getPageList(String name, Integer page) {
+		// TODO Auto-generated method stub
 		PageHelper.startPage(page,ConstantClass.PAGE_SIZE);
-		return new PageInfo<User>(dao.list(name));
+		return new PageInfo<User>(userMapper.list(name));
 	}
 
 	@Override
-	public User getUesrById(Integer userId) {
+	public User getUserById(Integer userId) {
 		// TODO Auto-generated method stub
-		return dao.getById(userId);
+		return userMapper.getById(userId);
 	}
 
 	@Override
 	public int updateStatus(Integer userId, int status) {
 		// TODO Auto-generated method stub
-		return dao.updateStatus(userId, status);
+		return userMapper.updateStatus(userId,status);
 	}
 
 	@Override
 	public User findByName(String username) {
 		// TODO Auto-generated method stub
-		return dao.findByUserName(username);
+		return userMapper.findByUserName(username);
 	}
 
 	@Override
 	public int register(User user) {
+		
 		// TODO Auto-generated method stub
 		//用户名是否存在
 		User existUser  = findByName(user.getUsername());
 		CmsAssert.AssertTrue(existUser==null,"该用户名已经存在");
-						
+				
 		//加盐
 		user.setPassword(Md5.password(user.getPassword(),
-		user.getUsername().substring(0, 2)));
-		return dao.add(user);
+				user.getUsername().substring(0, 2)));
+		return userMapper.add(user);
+		
 	}
 
 	@Override
 	public User login(User user) {
+		// TODO Auto-generated method stub
+		
 		User loginUser = findByName(user.getUsername());
 		if(loginUser==null)
 			return null;
@@ -73,6 +77,8 @@ public class UserServiceImpl implements UserService {
 			//登录失败
 			return null;
 		}
+		
+		
 	}
 	
 }

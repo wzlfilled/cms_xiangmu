@@ -6,7 +6,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 <mapper namespace="com.wangzhenlin.dao.ChannelMapper">
 
 	<select id="findById" resultType="channel">
-		select * from cms_channel where id=${value}
+		SELECT * FROM cms_channel WHERE id=${value}
 	</select>
 	
 </mapper>

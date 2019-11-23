@@ -14,7 +14,7 @@
     </div>
 
     <!-- Collect the nav links, forms, and other content for toggling -->
-    <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
+    <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1" style="background:#0097A7;">
       <ul class="nav navbar-nav"  >
 		<li>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</li>
 		<li>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</li>
@@ -47,7 +47,7 @@
 		          	${sessionScope.SESSION_USER_KEY.username}
 		           <span class="caret"></span></a>
 		         <ul class="dropdown-menu ">
-		            <li><a href="#">个人中心</a></li>
+		            <li><a href="/user/home">个人中心</a></li>
 		            <li><a href="#">个人设置</a></li>
 		            <li><a href="#">修改头像</a></li>
 		            <li role="separator" class="divider"></li>

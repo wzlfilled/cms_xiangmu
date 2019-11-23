@@ -7,19 +7,19 @@ import org.springframework.stereotype.Service;
 
 import com.wangzhenlin.dao.CategoryMapper;
 import com.wangzhenlin.entity.Category;
-import com.wangzhenlin.service.CatagoryService;
+import com.wangzhenlin.service.CategoryService;
 
 
 @Service
-public class CatagoryServiceImpl implements CatagoryService {
+public class CatagoryServiceImpl implements CategoryService {
 
 	@Autowired
-	CategoryMapper dao;
+	CategoryMapper categoryMapper;
 
 	@Override
 	public List<Category> listByChannelId(int chnId) {
 		// TODO Auto-generated method stub
-		return dao.listBuChannelId(chnId);
+		return categoryMapper.listByChannelId(chnId);
 	}
 	
 	

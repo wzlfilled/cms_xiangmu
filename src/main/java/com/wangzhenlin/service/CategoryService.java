@@ -4,7 +4,8 @@ import java.util.List;
 
 import com.wangzhenlin.entity.Category;
 
-public interface CatagoryService {
+public interface CategoryService {
+	
 
 	/**
 	 * 获取分类

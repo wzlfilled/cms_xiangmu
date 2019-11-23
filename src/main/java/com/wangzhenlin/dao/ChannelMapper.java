@@ -8,7 +8,7 @@ import com.wangzhenlin.entity.Channel;
 
 public interface ChannelMapper {
 
-	@Select("select * from cms_channel ORDER BY id")
+	@Select("SELECT * FROM cms_channel ORDER BY id")
 	public List<Channel> list();
 	
 }

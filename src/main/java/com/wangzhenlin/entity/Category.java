@@ -10,21 +10,26 @@ import java.io.Serializable;
  */
 public class Category implements Serializable{
 
-	private static final long serialVersionUID=1723982065292768684L;
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = 1723982065292768684L;
 	
+
 	private Integer id;
+	
+	private String name;
 	
 	/**
 	 * 频道id
 	 */
-	private String name;
+	private int channelId;
 	
 	/**
 	 * 频道
 	 */
-	private int channelId;
-	
 	private Channel channel;
+	
 
 	public Integer getId() {
 		return id;
@@ -57,7 +62,6 @@ public class Category implements Serializable{
 	public void setChannel(Channel channel) {
 		this.channel = channel;
 	}
-	
 	
 	
 	

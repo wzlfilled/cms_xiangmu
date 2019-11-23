@@ -10,13 +10,19 @@ import java.io.Serializable;
  */
 public class Channel implements Serializable{
 	
-	private static final long serialVersionUID = -5635056991787788655L;
-
-	private Integer id;
-	private String name;
-	private String description;
-	private String icon;
+    private static final long serialVersionUID = -5635056991787788655L;
 	
+	private Integer id;
+	private  String name;
+	private  String description;
+	private  String 	icon;
+	
+	
+	
+	@Override
+	public String toString() {
+		return "Channel [id=" + id + ", name=" + name + ", description=" + description + ", icon=" + icon + "]";
+	}
 	public Integer getId() {
 		return id;
 	}
@@ -29,7 +35,7 @@ public class Channel implements Serializable{
 	public void setName(String name) {
 		this.name = name;
 	}
-	public String getDesciprtion() {
+	public String getDescription() {
 		return description;
 	}
 	public void setDescription(String description) {
@@ -42,11 +48,6 @@ public class Channel implements Serializable{
 		this.icon = icon;
 	}
 	@Override
-	public String toString() {
-		return "Channel [id=" + id + ", name=" + name + ", descriprtion=" + description + ", icon=" + icon + "]";
-	}
-	
-	@Override
 	public int hashCode() {
 		final int prime = 31;
 		int result = 1;
@@ -56,7 +57,6 @@ public class Channel implements Serializable{
 		result = prime * result + ((name == null) ? 0 : name.hashCode());
 		return result;
 	}
-	
 	@Override
 	public boolean equals(Object obj) {
 		if (this == obj)
@@ -88,7 +88,6 @@ public class Channel implements Serializable{
 			return false;
 		return true;
 	}
-	
 	
 	
 }

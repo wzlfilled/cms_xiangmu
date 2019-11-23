@@ -11,6 +11,6 @@ public interface CategoryMapper {
 	 * @param chnId
 	 * @return
 	 */
-	List<Category> listBuChannelId(int chnId);
+	List<Category> listByChannelId(int chnId);
 	
 }

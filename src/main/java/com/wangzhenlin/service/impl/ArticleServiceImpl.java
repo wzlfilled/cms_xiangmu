@@ -8,52 +8,62 @@ import org.springframework.stereotype.Service;
 import com.github.pagehelper.PageHelper;
 import com.github.pagehelper.PageInfo;
 import com.wangzhenlin.common.ConstantClass;
-import com.wangzhenlin.dao.ArtivcleMapper;
+import com.wangzhenlin.dao.ArticleMapper;
 import com.wangzhenlin.entity.Article;
+import com.wangzhenlin.entity.Comment;
 import com.wangzhenlin.service.ArticleService;
 
+/**
+ * 
+ * @author Administrator
+ *
+ */
 @Service
 public class ArticleServiceImpl implements ArticleService {
 
 	@Autowired
-	ArtivcleMapper dao;
+	ArticleMapper articleMapper;
+	
 
 	@Override
 	public List<Article> getNewArticles(int i) {
 		// TODO Auto-generated method stub
-		return dao.newList(i);
+		return articleMapper.newList(i);
 	}
 
 	@Override
-	public PageInfo<Article> hotlist(int page) {
+	public PageInfo<Article> hotList(int page) {
+		// TODO Auto-generated method stub
 		PageHelper.startPage(page, ConstantClass.PAGE_SIZE);
-		return new PageInfo<Article>(dao.hosrList());
+		return new PageInfo<Article>(articleMapper.hostList());
+		
 	}
 
 	@Override
 	public Article getById(Integer id) {
 		// TODO Auto-generated method stub
-		return dao.getBuId(id);
+		return articleMapper.getById(id);
 	}
 
 	@Override
-	public PageInfo<Article> listByCat(int chnId, int categortId, int page) {
+	public PageInfo<Article> listByCat(int chnId, int categoryId, int page) {
+		// TODO Auto-generated method stub
 		PageHelper.startPage(page, ConstantClass.PAGE_SIZE);
-		return new PageInfo<Article>(dao.listByCat(chnId, categortId));
+		return new PageInfo<Article>(articleMapper.listByCat(chnId,categoryId));
 	}
-	
+
 	@Override
 	public PageInfo<Article> listByUser(int page,Integer userId) {
 		// TODO Auto-generated method stub
 		PageHelper.startPage(page, ConstantClass.PAGE_SIZE);
-		return new PageInfo<Article>(dao.listByUser(userId));
+		return new PageInfo<Article>(articleMapper.listByUser(userId));
 	
 	}
 
 	@Override
 	public int delete(int id) {
 		// TODO Auto-generated method stub
-		return dao.delete(id);
+		return articleMapper.delete(id);
 	}
 
 	/* (non Javadoc) 
@@ -66,7 +76,7 @@ public class ArticleServiceImpl implements ArticleService {
 	@Override
 	public Article checkExist(int id) {
 		// TODO Auto-generated method stub
-		return  dao.checkExist(id);
+		return  articleMapper.checkExist(id);
 	}
 
 	/* (non Javadoc) 
@@ -81,31 +91,74 @@ public class ArticleServiceImpl implements ArticleService {
 	public PageInfo<Article> getPageList(int status, Integer page) {
 		// TODO Auto-generated method stub
 		PageHelper.startPage(page, ConstantClass.PAGE_SIZE);
-		return new PageInfo<Article>(dao.listByStatus(status));
+		return new PageInfo<Article>(articleMapper.listByStatus(status));
 	}
 
 	@Override
 	public Article getDetailById(int id) {
 		// TODO Auto-generated method stub
-		return dao.getDetailById(id);
+		return  articleMapper.getDetailById(id);
 	}
 
 	@Override
 	public int apply(int id, int status) {
 		// TODO Auto-generated method stub
-		return dao.apply(id,status);
+		return articleMapper.apply(id,status);
 	}
 
+	
 	@Override
 	public int setHot(int id, int status) {
 		// TODO Auto-generated method stub
-		return dao.setHot(id,status);
+		return articleMapper.setHot(id,status);
 	}
 
 	@Override
 	public int add(Article article) {
 		// TODO Auto-generated method stub
-		return dao.add(article);
+		return articleMapper.add(article);
 	}
-	
+
+	@Override
+	public int update(Article article) {
+		// TODO Auto-generated method stub
+		return articleMapper.update(article);
+	}
+
+	@Override
+	public int faverite(Integer userId, int articleId) {
+		// TODO Auto-generated method stub
+		return articleMapper.favorite(userId,articleId);
+	}
+
+	@Override
+	public List<Article> getImgArticles(int num) {
+		// TODO Auto-generated method stub
+		return articleMapper.getImgArticles(num);
+	}
+
+	@Override
+	public int comment(Integer userId, int articleId, String content) {
+		// TODO Auto-generated method stub
+		
+		//插入评论表一条数据
+		int result = articleMapper.addComment(userId, articleId, content);
+		if(result>0) {
+			// 让文章表中的评论数量自增1
+			articleMapper.increaseCommentCnt(articleId);
+		}else {
+			return 0;
+		}
+		return result;
+		
+	}
+
+	@Override
+	public PageInfo<Comment> commentlist(int articleId, int page) {
+		// TODO Auto-generated method stub
+		PageHelper.startPage(page,10);
+		
+		return new PageInfo<Comment>(articleMapper.commentlist(articleId));
+	}
+
 }

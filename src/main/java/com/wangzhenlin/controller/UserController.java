@@ -3,13 +3,16 @@ package com.wangzhenlin.controller;
 import java.io.File;
 import java.io.IOException;
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 import java.util.UUID;
 
 import javax.servlet.http.HttpServletRequest;
 
+import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -20,11 +23,14 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.multipart.MultipartFile;
 
 import com.github.pagehelper.PageInfo;
+import com.google.gson.Gson;
 import com.wangzhenlin.common.CmsAssert;
 import com.wangzhenlin.common.ConstantClass;
 import com.wangzhenlin.common.MsgResult;
 import com.wangzhenlin.entity.Article;
 import com.wangzhenlin.entity.Channel;
+import com.wangzhenlin.entity.Image;
+import com.wangzhenlin.entity.TypeEnum;
 import com.wangzhenlin.entity.User;
 import com.wangzhenlin.service.ArticleService;
 import com.wangzhenlin.service.ChannelService;
@@ -34,26 +40,48 @@ import com.wangzhenlin.service.UserService;
 @RequestMapping("user")
 public class UserController {
 	
+Logger log = Logger.getLogger(UserController.class);
+	
+	
+	@Value("${upload.path}")
+	String updloadPath;
+	
 	@Autowired
 	UserService userService;
 	
 	@Autowired
 	ArticleService articleService;
 	
+	
 	@Autowired
 	ChannelService channelService;
 
 	private SimpleDateFormat dateFormat;
 
+	
+	@RequestMapping("favarite")
+	@ResponseBody
+	public MsgResult favarite(HttpServletRequest request, int id) {
+		
+		CmsAssert.AssertTrue(id>0, "id 不合法");
+		User loginUser = (User)request.getSession().getAttribute(ConstantClass.USER_KEY);
+		CmsAssert.AssertTrue(loginUser!=null, "亲，您尚未登录！！");
+		int result = articleService.faverite(loginUser.getId(),id);
+		CmsAssert.AssertTrue(result>0, "很遗憾，收藏失败！！");
+		return new MsgResult(1,"恭喜，收藏成功",null);
+		
+	}
+	
 	//  httppxxxx://user/hello
 	@RequestMapping(value="hello",method=RequestMethod.GET)
 	public String tet(HttpServletRequest request) {
 		request.setAttribute("info", "hello");
+		
 		return "user/test";
 	}
 	
 	/**
-	 * 跳转到注册页面
+	 * 跳转到注册页面 
 	 * @param request
 	 * @return
 	 */
@@ -63,7 +91,7 @@ public class UserController {
 	}
 	
 	/**
-	 * 处理用户提交注册的数据
+	 * 处理用户提交的注册的数据
 	 * @param request
 	 * @param user
 	 * @return
@@ -71,14 +99,18 @@ public class UserController {
 	@RequestMapping(value="register",method=RequestMethod.POST)
 	public String register(HttpServletRequest request,User user) {
 		
+		
 		int result = userService.register(user);
 		CmsAssert.AssertTrue(result>0,"用户注册失败，请稍后再试");
+		
 		
 		return "redirect:/user/login";
 	}
 	
+	
+	
 	/**
-	 * 跳转到登录页面  
+	 * 跳转到登录页面 
 	 * @param request
 	 * @return
 	 */
@@ -95,6 +127,7 @@ public class UserController {
 	 */
 	@RequestMapping(value="login",method=RequestMethod.POST)
 	public String login(HttpServletRequest request,User user) {
+		
 		
 		User loginUser  = userService.login(user);
 		// 用户存在 登录成功
@@ -113,7 +146,6 @@ public class UserController {
 	
 	/**
 	 * 
-	 * @param request
 	 * @return
 	 */
 	@RequestMapping("logout")
@@ -139,30 +171,93 @@ public class UserController {
 	}
 	
 	/**
+	 * 
+	 * @param request
+	 * @param id  文章id
+	 * @return
+	 */
+	@GetMapping("updateArticle")
+	public String updateArticle(HttpServletRequest request,int id) {
+		
+		// 获取文章的详情 用于回显
+		Article article = articleService.getDetailById(id);
+		request.setAttribute("article", article);
+		request.setAttribute("content1", htmlspecialchars(article.getContent()));
+		
+		System.out.println(" 将要修改文章 " + article);
+		 
+		// 获取所有的频道
+		List<Channel> channels =  channelService.list();
+		request.setAttribute("channels", channels);
+		
+		return "article/update";
+	}
+	
+	/**
+	 * 
+	 * @param request
+	 * @param article
+	 * @return
+	 * @throws IOException 
+	 * @throws IllegalStateException 
+	 */
+	@PostMapping("updateArticle")
+	@ResponseBody
+	public MsgResult updateArticle(HttpServletRequest request,
+			MultipartFile file, Article article) throws IllegalStateException, IOException {
+		//文章id 是否存在
+		
+		//用户是否有权限修改
+		
+		//
+		if(!file.isEmpty()) {
+			String picUrl = processFile(file);
+			article.setPicture(picUrl);
+		}
+		
+		int result = articleService.update(article);
+		
+		if(result>0) {
+			// 成功
+			return new MsgResult(1,"",null);
+		}else {
+			return new MsgResult(2,"失败",null);
+		}
+		
+	}
+
+	
+	
+	
+	
+	/**
 	 * 进入发表文章的界面
 	 * @param request
 	 * @return
 	 */
 	@GetMapping("postArticle")
 	public String postArticle(HttpServletRequest request) {
+		
 		// 获取所有的频道
 		List<Channel> channels =  channelService.list();
 		request.setAttribute("channels", channels);
 		return "article/publish";
 	}
+
 	/**
 	 * 上传文件的规则
 	 *  文件扩展名不能改变
 	 *  保存到某个路径下边  要求子目录
 	 *  子目录  每天一个子目录
 	 */
+	
 	/**
-	 * @param request
+	 * 
 	 * @param file
 	 * @param article
 	 * @return
-	 * @throws IllegalStateException
-	 * @throws IOException
+	 * @throws IOException 
+	 * @throws IllegalStateException 
 	 */
 	@PostMapping("postArticle")
 	@ResponseBody
@@ -184,12 +279,16 @@ public class UserController {
 	}
 	
 	/**
+	 * 
 	 * @param file
-	 * @return   保存文件的相对路径
+	 * @return  保存文件的相对路径
 	 * @throws IllegalStateException
 	 * @throws IOException
 	 */
-	private String processFile(MultipartFile file) throws IllegalStateException, IOException {
+    private String processFile(MultipartFile file) throws IllegalStateException, IOException {
+    	
+    	log.info("updloadPath is "  + updloadPath);
+
     	
     	//1 求扩展名  "xxx.jpg"
     	String suffixName =  file.getOriginalFilename().substring(file.getOriginalFilename().lastIndexOf('.'));
@@ -199,22 +298,22 @@ public class UserController {
     	
     	dateFormat = new SimpleDateFormat("yyyyMMdd");
     	String path = dateFormat.format(new Date());
-    	File pathFile  = new File("d:/pic/" + path);
+    	File pathFile  = new File(updloadPath + "/" + path);
     	if(!pathFile.exists()) {
     		pathFile.mkdirs();
     	}
     	
     	// 最终的新的文件名称
-    	String newFileName = "d:/pic/"+ path + "/" + fileName;
+    	String newFileName = updloadPath + "/"+ path + "/" + fileName;
     	file.transferTo(new File(newFileName));
     	
     	return path + "/" + fileName ;
     }
+		
+	
 	
 	/**
 	 * 获取文章列表
-	 * @param request
-	 * @param page
 	 * @return
 	 */
 	@RequestMapping("myarticles")
@@ -244,9 +343,102 @@ public class UserController {
 		
 		int result = articleService.delete(id);
 		CmsAssert.AssertTrue(result>0,"文章删除失败");
+		
 		return new MsgResult(1,"删除成功",null);
 		
 	}
+	
+	/**
+	 * 
+	 * @return
+	 */
+	@GetMapping("postImg")
+	public String postImg(HttpServletRequest request) {
+		
+		// 获取所有的频道
+		List<Channel> channels =  channelService.list();
+		request.setAttribute("channels", channels);	
+		return "article/postimg";
+		
+	}
+	
+	/**
+	 * 
+	 * @return
+	 * @throws IOException 
+	 * @throws IllegalStateException 
+	 */
+	@RequestMapping(value = "postImg",method=RequestMethod.POST)
+	@ResponseBody
+	public MsgResult postImg(HttpServletRequest request,Article article,
+			MultipartFile file[],String desc[]) throws IllegalStateException, IOException {
+		
+		User loginUser = (User)request.getSession().getAttribute(ConstantClass.USER_KEY);
+		
+		
+		List<Image> list = new ArrayList<>();
+		// 遍历处理每个上传图片 并存入list
+		for (int i = 0; i < file.length && i < desc.length; i++) {
+			String url = processFile(file[i]);
+			Image image = new Image();
+			image.setDesc(desc[i]);
+			image.setUrl(url);
+			list.add(image);
+		}
+		
+		//
+		Gson gson = new Gson();
+		
+		//设置作者
+		article.setUserId(loginUser.getId());
+		article.setContent(gson.toJson(list));
+		//设置文章类型 是图片
+		article.setArticleType(TypeEnum.IMG);
+		
+		int add = articleService.add(article);
+		if(add > 0) {
+			return new MsgResult(1,"发布成功11",null);
+		}else {
+			return new MsgResult(2,"发布失败11",null);
+		}
+		
+		
+	}
+	
+	/**
+	 * comment
+	 * @param request
+	 * @param id
+	 * @param content
+	 * @return
+	 */
+	@RequestMapping("comment")
+	@ResponseBody
+	public MsgResult comment(HttpServletRequest request, int id,String content) {
+		
+		User loginUser = (User)request.getSession().getAttribute(ConstantClass.USER_KEY);
+		CmsAssert.AssertTrue(loginUser!=null, "亲，您尚未登录");
+		
+		int result = articleService.comment(loginUser.getId(),id,content);
+		CmsAssert.AssertTrue(result>0, "亲，评论失败了！！");
+		return new MsgResult(1,"评论成功","");
+	}
+	
+	
+	
+	
+	
+	
+	
+	
+	private String htmlspecialchars(String str) {
+		str = str.replaceAll("&", "&amp;");
+		str = str.replaceAll("<", "&lt;");
+		str = str.replaceAll(">", "&gt;");
+		str = str.replaceAll("\"", "&quot;");
+		return str;
+	}
+
 	
 	
 }

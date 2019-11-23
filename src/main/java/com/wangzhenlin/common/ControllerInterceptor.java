@@ -10,10 +10,10 @@ public class ControllerInterceptor {
 
 	@ExceptionHandler(CmcException.class)
 	@ResponseBody
-	public MsgResult interceptorException(CmcException excetion){
+	public MsgResult  interceptorException(CmcException excetion) {
 		System.out.println(" 错误是 "  + excetion);
 		return new MsgResult(100,excetion.getMessage(),null);
-	}
+	}	
 	
 	@ExceptionHandler(CmcExceptionHtml.class)
 	public ModelAndView  interceptorExceptionHtml(CmcExceptionHtml excetion) {
@@ -22,6 +22,8 @@ public class ControllerInterceptor {
 		modelAndView.setViewName("error");// 跳转到jsp
 		modelAndView.addObject("errorInfo", excetion.getMessage());
 		return modelAndView;
+		
+		
 	}	
 	
 }

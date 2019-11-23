@@ -13,12 +13,12 @@ import com.wangzhenlin.service.ChannelService;
 public class ChannelServiceImpl implements ChannelService{
 
 	@Autowired
-	ChannelMapper dao;
+	ChannelMapper channelMapper;
 
 	@Override
 	public List<Channel> list() {
 		// TODO Auto-generated method stub
-		return dao.list();
+		return channelMapper.list();
 	}
 	
 	

@@ -12,7 +12,6 @@
  <script type="text/javascript" src="/resource/js/jquery-3.2.1.js"></script> 
  <script type="text/javascript" src="/resource/bootstrap/js/bootstrap.js"></script>
  <title>有花堪折直须折</title>
- 
 <style type="text/css">
 	.menu li{
 		font-size:26px;
@@ -21,6 +20,7 @@
 	.menu li:hover{
 		background:gray;
 	}
+	
 	
 </style>
 
@@ -34,12 +34,16 @@
 <audio autoplay="" loop=""><source src="/resource/audio/jmszl.mp3"></audio>
 <!-- 导航条 -->
 <nav class="navbar navbar-default">
+ 
   	
   	<!-- logo -->
   	<div class="navbar-header">
       <a class="navbar-brand" href="#">
         <img alt="Brand" src="/resource/images/logo.png">
       </a>
+      
+      
+      
     </div>
     
       <form class="navbar-form"  style="float:none;text-align:center;">
@@ -54,6 +58,8 @@
       <ul class="nav navbar-nav">
         
       </ul>
+      
+    
       
       <ul class="nav navbar-nav navbar-right" >
         <li><a href="#"><img width="40px" height="40px" src="/resource/images/donghua.gif"/> </a></li>
@@ -70,6 +76,8 @@
         </li>
       </ul>
     </div><!-- /.navbar-collapse -->
+    
+ 
 </nav>
 
 <div class="container-fluid" >
@@ -89,8 +97,7 @@
 			<!-- 中间的内容 -->
 			<div class="col-md-8" style="background:white;minheight:200px" >
 				<div>
-				
-					<hr>
+						<hr>
 						
 				</div>
 				
@@ -101,7 +108,6 @@
 							<li data-target="#myCarousel" data-slide-to="1"></li>
 							<li data-target="#myCarousel" data-slide-to="2"></li>
 						</ol>   
-						
 						<!-- 轮播（Carousel）项目 -->
 						<div class="carousel-inner">
 							<div class="item active">
@@ -114,7 +120,6 @@
 								<img height="300px" src="/resource/images/bg05.jpg" alt="Third slide">
 							</div>
 						</div>
-						
 						<!-- 轮播（Carousel）导航 -->
 						<a class="left carousel-control" href="#myCarousel" role="button" data-slide="prev">
 							<span class="glyphicon glyphicon-chevron-left" aria-hidden="true"></span>
@@ -125,7 +130,6 @@
 							<span class="sr-only">Next</span>
 						</a>
 					</div>
-					
 					<!-- 放文章的列表 -->
 					<div >
 						<div class=row >
@@ -141,59 +145,54 @@
 							<div class="col-md-10">
 								文章大的吧i奥体11
 							</div>
+							
 						</div>
 					</div>
+					 
 			</div>
-			
 			<!-- 中间的内容结束 -->
+			
 			
 			<div class="col-md-2" style="minheight:200px" >
 				<div class="panel panel-primary">
-				
 					<div class="panel-heading">
 						<h3 class="panel-title">面板标题</h3>
 					</div>
-					
 					<div class="panel-body">
 						这是一个基本的面板
 					</div>
-					
 				</div>
 				<div class="panel panel-success">
-				
 					<div class="panel-heading">
 						<h3 class="panel-title">面板标题</h3>
 					</div>
-					
 					<div class="panel-body">
 						这是一个基本的面板
 					</div>
-					
 					<div class="panel-body">
 						这是一个基本的面板
 					</div>
-					
 				</div>
 				<div class="panel panel-info">
-				
 					<div class="panel-heading">
 						<h3 class="panel-title">面板标题</h3>
 					</div>
-					
 					<div class="panel-body">
 						这是一个基本的面板
 					</div>
-					
 				</div>
+			
 			</div>
 		</div>
+		
 	</div>
+
 </div>
 
 
 
 <!-- 底部 -->
-<nav class="navbar navbar-default">
+<nav class="navbar navbar-default" >
   <div class="container-fluid">
   </div>
 </nav>

@@ -11,24 +11,30 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 		<result property="updateTime" column="update_time"/>
 	</resultMap>
 	
+	<select id="findUserById" resultMap="userMapper">
+		SELECT * FROM cms_user WHERE id=${value}
+	</select>
+	
+	
 	<select id="list" resultMap="userMapper">
-		SELECT * FROM cms_user
+		SELECT * FROM cms_user 
 		<where>
-			<if test=' value!=null and value="" '>
+			<if test=' value!=null and  value!="" '>
 				AND username LIKE concat('%',#{value},'%')
 			</if>
 		</where>
 	</select>
 	
 	<select id="getById" resultMap="userMapper">
-		SELECT * FROM cms_user
+		SELECT * FROM cms_user 
 		WHERE id=#{value}
 	</select>
 	
 	<insert id="add">
-		insert into cms_user(username,password,nickname,birthday,gender,locked,create_time,update_time,url,score,role)
-		values(#{username},#{password},#{nickname},#{birthday},
-		       #{gender},0,now(),now(),'',0,#{role})
+		INSERT INTO cms_user(username,password,nickname,birthday
+                           ,gender,locked,create_time,update_time,url,score,role) 
+		      values(#{username},#{password},#{nickname},#{birthday},
+		       #{gender},0,now(),now(),'',0,#{role}) 
 	</insert>
 	
 </mapper>
