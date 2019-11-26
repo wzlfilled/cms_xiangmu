@@ -20,12 +20,34 @@ public class LinkServiceImpl implements LinkService{
 	public int add(Link link) {
 		// TODO Auto-generated method stub
 		return linkMapper.add(link);
+		
 	}
 
 	@Override
 	public PageInfo list(int page) {
-		PageHelper.startPage(page, 10);
+		// TODO Auto-generated method stub
+		PageHelper.startPage(page,10);
+		
 		return new PageInfo<Link>(linkMapper.list());
+	}
+
+	@Override
+	public int delete(int id) {
+		// TODO Auto-generated method stub
+		return linkMapper.delete(id);
+	}
+
+	@Override
+	public Link get(int id) {
+		// TODO Auto-generated method stub
+		return linkMapper.get(id);
+	}
+
+	@Override
+	public int update(Link link) {
+		// TODO Auto-generated method stub
+		return linkMapper.update(link);
+		
 	}
 	
 }

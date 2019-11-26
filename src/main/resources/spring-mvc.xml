@@ -34,8 +34,11 @@
 			<mvc:exclude-mapping path="/"/>
 			<mvc:exclude-mapping path="/index"/>
 			<mvc:exclude-mapping path="/pic/**"/>
+			<mvc:exclude-mapping path="/user/comment"/>			
 			<mvc:exclude-mapping path="/resource/**"/>
-			<mvc:exclude-mapping path="/article/showdetail"/>
+			<mvc:exclude-mapping path="/article/**"/>
+			<mvc:exclude-mapping path="/user/favarite"/>
+			<mvc:exclude-mapping path="/user/collect"/>
 			<!-- 拦截器的实现类 -->
 			<bean class="com.wangzhenlin.web.UserInterceptor"></bean>
 		</mvc:interceptor>

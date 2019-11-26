@@ -23,7 +23,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 	<select id="newList" resultType="article">
 		SELECT id,title FROM cms_article 
 		WHERE deleted=0 AND status=1 
-		ORDER BY created DESC  limit ${value}
+		ORDER BY created DESC limit ${value}
 	</select>
 	
 	<select id="hostList" resultMap="articleMapper" >

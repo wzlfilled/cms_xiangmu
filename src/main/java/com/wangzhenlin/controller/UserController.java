@@ -29,18 +29,20 @@ import com.wangzhenlin.common.ConstantClass;
 import com.wangzhenlin.common.MsgResult;
 import com.wangzhenlin.entity.Article;
 import com.wangzhenlin.entity.Channel;
+import com.wangzhenlin.entity.Collect;
 import com.wangzhenlin.entity.Image;
 import com.wangzhenlin.entity.TypeEnum;
 import com.wangzhenlin.entity.User;
 import com.wangzhenlin.service.ArticleService;
 import com.wangzhenlin.service.ChannelService;
+import com.wangzhenlin.service.CollectService;
 import com.wangzhenlin.service.UserService;
 
 @Controller
 @RequestMapping("user")
 public class UserController {
 	
-Logger log = Logger.getLogger(UserController.class);
+	Logger log = Logger.getLogger(UserController.class);
 	
 	
 	@Value("${upload.path}")
@@ -51,6 +53,9 @@ Logger log = Logger.getLogger(UserController.class);
 	
 	@Autowired
 	ArticleService articleService;
+	
+	@Autowired
+	CollectService collectService;
 	
 	
 	@Autowired
@@ -426,9 +431,30 @@ Logger log = Logger.getLogger(UserController.class);
 	
 	
 	
-	
-	
-	
+	/**
+	 * 
+	 * @param request
+	 * @param collect
+	 * @return
+	 */
+	@RequestMapping("collect")
+	@ResponseBody
+	public MsgResult collect(HttpServletRequest request, Collect collect) {
+		
+		//CmsAssert.AssertTrue(id>0, "id 不合法");
+		User loginUser = (User)request.getSession().getAttribute(ConstantClass.USER_KEY);
+		CmsAssert.AssertTrue(loginUser!=null, "亲，您尚未登录！！");
+		
+		if(collect.getName().length()>20) {
+			collect.setName(collect.getName().substring(0, 20) + "...");
+		}
+		collect.setUserId(loginUser.getId());
+		int result = collectService.add(collect);
+		
+		CmsAssert.AssertTrue(result>0, "很遗憾，加入收藏失败！！");
+		return new MsgResult(1,"恭喜，收藏成功",null);
+		
+	}
 	
 	
 	private String htmlspecialchars(String str) {
@@ -438,7 +464,4 @@ Logger log = Logger.getLogger(UserController.class);
 		str = str.replaceAll("\"", "&quot;");
 		return str;
 	}
-
-	
-	
 }

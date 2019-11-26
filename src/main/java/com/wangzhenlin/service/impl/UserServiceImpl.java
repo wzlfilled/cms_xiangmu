@@ -19,6 +19,7 @@ public class UserServiceImpl implements UserService {
 	@Autowired
 	UserMapper userMapper;
 
+	@Override
 	public PageInfo<User> getPageList(String name, Integer page) {
 		// TODO Auto-generated method stub
 		PageHelper.startPage(page,ConstantClass.PAGE_SIZE);

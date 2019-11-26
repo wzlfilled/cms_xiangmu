@@ -35,12 +35,12 @@
 	
   <dependencies>
   
-  	<!--  自己的工具类  -->
-  	<dependency>
-  		<groupId>com.zhuzhiguang.utils</groupId>
-  		<artifactId>zhukzhiguang-utils</artifactId>
-  		<version>0.0.1-SNAPSHOT</version>
-  	</dependency>
+  <!--  自己的工具类  -->
+  <dependency>
+  	<groupId>com.wangzhenlin</groupId>
+  <artifactId>wangzhenlin-utils</artifactId>
+  <version>0.0.1-SNAPSHOT</version>
+  </dependency>
   	
   	<!-- spring 及springMVC -->
 		<dependency>

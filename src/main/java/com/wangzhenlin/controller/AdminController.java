@@ -23,6 +23,7 @@ public class AdminController {
 
 	@Autowired
 	UserService userService;
+	
 	@Autowired
 	ArticleService articleService;
 	

@@ -11,8 +11,11 @@ import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.ResponseBody;
 
 import com.github.pagehelper.PageInfo;
+import com.wangzhenlin.StringUtils;
+import com.wangzhenlin.common.MsgResult;
 import com.wangzhenlin.entity.Link;
 import com.wangzhenlin.service.LinkService;
 
@@ -51,6 +54,55 @@ public class LinkController {
 		return "admin/link/add";	 
 	}
 	
+	
+	@GetMapping("update")
+	public String add(HttpServletRequest request,int id) {
+		request.setAttribute("link", linkService.get(id));
+		return "admin/link/update";	 
+	}
+	
+	
+	@RequestMapping("delete")
+	@ResponseBody
+	public MsgResult delete(HttpServletRequest request,int id) {
+		int result = linkService.delete(id);
+		if(result<1)
+			return new MsgResult(2,"删除失败",null);
+		
+		return new MsgResult(1,"删除失败",null);
+		
+	}
+	
+	/**
+	 * 
+	 * @param request
+	 * @param link
+	 * @param result
+	 * @return
+	 */
+	@PostMapping("update")
+	public String update(HttpServletRequest request,
+			@Valid  @ModelAttribute("link") Link link,
+			BindingResult result
+			) {
+		
+		if(!StringUtils.isHttpUrl(link.getUrl())) {
+			result.rejectValue("url", "不是合法的url", "不是合法的url");
+		}
+		
+		// 有错误 还在原来的页面
+		if(result.hasErrors()) {
+			//request.setAttribute("link", link);
+			return "admin/link/update";	
+		}
+		
+		linkService.update(link);
+		
+		// 没有错误跳转到列表页面
+		return "redirect:list";
+	}
+	
+	
 	/**
 	 * 
 	 * @param request
@@ -63,8 +115,15 @@ public class LinkController {
 			@Valid  @ModelAttribute("link") Link link,
 			BindingResult result
 			) {
+		
+		if(!StringUtils.isHttpUrl(link.getUrl())) {
+			result.rejectValue("url", "不是合法的url", "不是合法的url");
+		}
+		
 		// 有错误 还在原来的页面
 		if(result.hasErrors()) {
+			
+			request.setAttribute("link", link);
 			return "admin/link/add";	
 		}
 		linkService.add(link);
