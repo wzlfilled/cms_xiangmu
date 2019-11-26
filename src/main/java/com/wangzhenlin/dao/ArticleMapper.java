@@ -102,8 +102,7 @@ public interface ArticleMapper {
 
 	/**
 	 * 
-	 * #{articleType,typeHandler=org.apache.ibatis.type.EnumOrdinalTypeHandler,"
-			+ "jdbcType=INTEGER,javaType=com.zhukaige.entity.TypeEnum}
+	 * 
 	 * 添加文章
 	 * @param article
 	 * @return
